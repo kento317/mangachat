@@ -147,7 +147,8 @@ return [
 
     'attributes' => [
         'email' => 'メールアドレス',
-	'password' => 'パスワード',
+	    'password' => 'パスワード',
+        'title' => 'ルーム名',
     ],
 
 ];
