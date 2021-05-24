@@ -149,6 +149,7 @@ return [
         'email' => 'メールアドレス',
 	    'password' => 'パスワード',
         'title' => 'ルーム名',
+        'comment' => 'コメント',
     ],
 
 ];

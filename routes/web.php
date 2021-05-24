@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,6 +21,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/rooms', 'RoomController@index')->name('rooms.index');
+Route::get('/rooms/search', 'RoomController@search')->name('rooms.search');
 Route::get('/rooms/create', 'RoomController@create')->name('rooms.create');
 Route::post('/rooms', 'RoomController@store')->name('rooms.store');
 Route::get('/rooms/{room}', 'RoomController@show')->name('rooms.show');
+
+Route::resource('chats', 'ChatController');

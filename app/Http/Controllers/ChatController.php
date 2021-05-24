@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
+use App\Chat;
+use App\Room;
 
 class ChatController extends Controller
 {
@@ -34,7 +37,22 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validatedData = $request->validate([
+            'comment' => 'required',
+        ]);
+
+        $chat = new Chat;
+        $chat->comment = $request->comment;
+        $chat->user_id = Auth::id();
+        $chat->room_id = $request->room_id;
+
+        $chat->save();
+
+        $room = Room::find($request->room_id);
+        $chats = Chat::where('room_id', $request->room_id)->get();
+        
+        return view('rooms.show', compact('room', 'chats'));
     }
 
     /**
