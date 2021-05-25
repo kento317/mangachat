@@ -27,3 +27,6 @@ Route::post('/rooms', 'RoomController@store')->name('rooms.store');
 Route::get('/rooms/{room}', 'RoomController@show')->name('rooms.show');
 
 Route::resource('chats', 'ChatController');
+
+Route::get('/chat/like/{id}', 'ChatController@like')->name('chat.like');
+Route::get('/chat/unlike/{id}', 'ChatController@unlike')->name('chat.unlike');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Chat;
 use App\Room;
+use App\Like;
 
 class ChatController extends Controller
 {
@@ -51,8 +52,9 @@ class ChatController extends Controller
 
         $room = Room::find($request->room_id);
         $chats = Chat::where('room_id', $request->room_id)->get();
-        
-        return view('rooms.show', compact('room', 'chats'));
+
+        // return view('rooms.show', compact('room', 'chats'));
+        return redirect()->route('rooms.show', compact('room', 'chats'));
     }
 
     /**
@@ -98,5 +100,48 @@ class ChatController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    // only()の引数内のメソッドはログイン時のみ有効
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified'])->only(['like', 'unlike']);
+    }
+
+
+
+    /**
+     * 引数のIDに紐づくリプライにLIKEする
+     *
+     * @param $id リプライID
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function like($id)
+    {
+        Like::create([
+            'chat_id' => $id,
+            'user_id' => Auth::id(),
+        ]);
+
+        session()->flash('success', 'You Liked the Reply.');
+
+        return redirect()->back();
+    }
+
+    /**
+     * 引数のIDに紐づくリプライにUNLIKEする
+     *
+     * @param $id リプライID
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function unlike($id)
+    {
+        $like = Like::where('chat_id', $id)->where('user_id', Auth::id())->first();
+        $like->delete();
+
+        session()->flash('success', 'You Unliked the Reply.');
+
+        return redirect()->back();
     }
 }
